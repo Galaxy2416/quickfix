@@ -74,13 +74,15 @@ EXCEPT ( ConfigError )
     ( dict.getString( BEGINSTRING ) );
     SenderCompID senderCompID
     ( dict.getString( SENDERCOMPID ) );
+    SenderSubID senderSubID
+    ( dict.getString( "SenderSubID" ) );
     TargetCompID targetCompID
     ( dict.getString( TARGETCOMPID ) );
 
     std::string sessionQualifier;
     if( dict.has( SESSION_QUALIFIER ) )
       sessionQualifier = dict.getString( SESSION_QUALIFIER );
-    SessionID sessionID( beginString, senderCompID, targetCompID, sessionQualifier );
+    SessionID sessionID( beginString, senderCompID, senderSubID, targetCompID, sessionQualifier );
     s.set( sessionID, dict );
   }
   return stream;
@@ -142,6 +144,7 @@ EXCEPT ( ConfigError )
 
   settings.setString( BEGINSTRING, sessionID.getBeginString() );
   settings.setString( SENDERCOMPID, sessionID.getSenderCompID() );
+  settings.setString( "SenderSubID", sessionID.getSenderSubID() );
   settings.setString( TARGETCOMPID, sessionID.getTargetCompID() );
 
   settings.merge( m_defaults );

@@ -26,18 +26,7 @@
 #include "quickfix/MessageCracker.h"
 #include "quickfix/Values.h"
 #include "quickfix/Mutex.h"
-
-#include "quickfix/fix40/NewOrderSingle.h"
-#include "quickfix/fix40/ExecutionReport.h"
-#include "quickfix/fix40/OrderCancelRequest.h"
-#include "quickfix/fix40/OrderCancelReject.h"
-#include "quickfix/fix40/OrderCancelReplaceRequest.h"
-
-#include "quickfix/fix41/NewOrderSingle.h"
-#include "quickfix/fix41/ExecutionReport.h"
-#include "quickfix/fix41/OrderCancelRequest.h"
-#include "quickfix/fix41/OrderCancelReject.h"
-#include "quickfix/fix41/OrderCancelReplaceRequest.h"
+#include "quickfix/Field.h"
 
 #include "quickfix/fix42/NewOrderSingle.h"
 #include "quickfix/fix42/ExecutionReport.h"
@@ -50,23 +39,14 @@
 #include "quickfix/fix43/OrderCancelRequest.h"
 #include "quickfix/fix43/OrderCancelReject.h"
 #include "quickfix/fix43/OrderCancelReplaceRequest.h"
-#include "quickfix/fix43/MarketDataRequest.h"
-
-#include "quickfix/fix44/NewOrderSingle.h"
-#include "quickfix/fix44/ExecutionReport.h"
-#include "quickfix/fix44/OrderCancelRequest.h"
-#include "quickfix/fix44/OrderCancelReject.h"
-#include "quickfix/fix44/OrderCancelReplaceRequest.h"
-#include "quickfix/fix44/MarketDataRequest.h"
-
-#include "quickfix/fix50/NewOrderSingle.h"
-#include "quickfix/fix50/ExecutionReport.h"
-#include "quickfix/fix50/OrderCancelRequest.h"
-#include "quickfix/fix50/OrderCancelReject.h"
-#include "quickfix/fix50/OrderCancelReplaceRequest.h"
-#include "quickfix/fix50/MarketDataRequest.h"
 
 #include <queue>
+
+namespace FIX
+{
+  USER_DEFINE_STRING(ContractNo, 10017);
+ //  USER_DEFINE_PRICE(MyPriceField, 8756);
+}
 
 class Application :
       public FIX::Application,
@@ -87,56 +67,28 @@ private:
   void fromApp( const FIX::Message& message, const FIX::SessionID& sessionID )
   EXCEPT( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType );
 
-  void onMessage( const FIX40::ExecutionReport&, const FIX::SessionID& );
-  void onMessage( const FIX40::OrderCancelReject&, const FIX::SessionID& );
-  void onMessage( const FIX41::ExecutionReport&, const FIX::SessionID& );
-  void onMessage( const FIX41::OrderCancelReject&, const FIX::SessionID& );
   void onMessage( const FIX42::ExecutionReport&, const FIX::SessionID& );
   void onMessage( const FIX42::OrderCancelReject&, const FIX::SessionID& );
-  void onMessage( const FIX43::ExecutionReport&, const FIX::SessionID& );
-  void onMessage( const FIX43::OrderCancelReject&, const FIX::SessionID& );
-  void onMessage( const FIX44::ExecutionReport&, const FIX::SessionID& );
-  void onMessage( const FIX44::OrderCancelReject&, const FIX::SessionID& );
-  void onMessage( const FIX50::ExecutionReport&, const FIX::SessionID& );
-  void onMessage( const FIX50::OrderCancelReject&, const FIX::SessionID& );
 
-  void queryEnterOrder();
+  void queryEnterOrder(int qty=1000);
   void queryCancelOrder();
   void queryReplaceOrder();
-  void queryMarketDataRequest();
+  void queryManyOrders();
+  size_t queryCount();
 
-  FIX40::NewOrderSingle queryNewOrderSingle40();
-  FIX41::NewOrderSingle queryNewOrderSingle41();
-  FIX42::NewOrderSingle queryNewOrderSingle42();
-  FIX43::NewOrderSingle queryNewOrderSingle43();
-  FIX44::NewOrderSingle queryNewOrderSingle44();
-  FIX50::NewOrderSingle queryNewOrderSingle50();
-  FIX40::OrderCancelRequest queryOrderCancelRequest40();
-  FIX41::OrderCancelRequest queryOrderCancelRequest41();
+  FIX42::NewOrderSingle queryNewOrderSingle42(int qty);
   FIX42::OrderCancelRequest queryOrderCancelRequest42();
-  FIX43::OrderCancelRequest queryOrderCancelRequest43();
-  FIX44::OrderCancelRequest queryOrderCancelRequest44();
-  FIX50::OrderCancelRequest queryOrderCancelRequest50();
-  FIX40::OrderCancelReplaceRequest queryCancelReplaceRequest40();
-  FIX41::OrderCancelReplaceRequest queryCancelReplaceRequest41();
   FIX42::OrderCancelReplaceRequest queryCancelReplaceRequest42();
-  FIX43::OrderCancelReplaceRequest queryCancelReplaceRequest43();
-  FIX44::OrderCancelReplaceRequest queryCancelReplaceRequest44();
-  FIX50::OrderCancelReplaceRequest queryCancelReplaceRequest50();
-  FIX43::MarketDataRequest queryMarketDataRequest43();
-  FIX44::MarketDataRequest queryMarketDataRequest44();
-  FIX50::MarketDataRequest queryMarketDataRequest50();
 
   void queryHeader( FIX::Header& header );
   char queryAction();
-  int queryVersion();
-  bool queryConfirm( const std::string& query );
 
   FIX::SenderCompID querySenderCompID();
   FIX::TargetCompID queryTargetCompID();
   FIX::TargetSubID queryTargetSubID();
   FIX::ClOrdID queryClOrdID();
   FIX::OrigClOrdID queryOrigClOrdID();
+  FIX::OrderID queryOrderID();
   FIX::Symbol querySymbol();
   FIX::Side querySide();
   FIX::OrderQty queryOrderQty();

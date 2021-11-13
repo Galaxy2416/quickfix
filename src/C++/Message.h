@@ -34,6 +34,7 @@
 #include "Values.h"
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 namespace FIX
 {
@@ -409,7 +410,10 @@ inline std::ostream& operator <<
 ( std::ostream& stream, const Message& message )
 {
   std::string str;
-  stream << message.toString( str );
+  message.toString( str );
+  std::replace( str.begin(), str.end(), '\001', ';');
+  stream << str;
+  
   return stream;
 }
 

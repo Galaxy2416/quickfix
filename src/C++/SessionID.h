@@ -50,10 +50,29 @@ public:
       m_isFIXT = true;
   }
 
+  SessionID( const std::string& beginString,
+             const std::string& senderCompID,
+             const std::string& senderSubID,
+             const std::string& targetCompID,
+             const std::string& sessionQualifier)
+  : m_beginString( BeginString(beginString) ),
+    m_senderCompID( SenderCompID(senderCompID) ),
+    m_senderSubID( SenderSubID(senderSubID) ),
+    m_targetCompID( TargetCompID(targetCompID) ),
+    m_sessionQualifier( sessionQualifier ),
+    m_isFIXT(false)
+  {
+    toString(m_frozenString);
+    if( beginString.substr(0, 4) == "FIXT" )
+      m_isFIXT = true;
+  }
+
   const BeginString& getBeginString() const
     { return m_beginString; }
   const SenderCompID& getSenderCompID() const
     { return m_senderCompID; }
+  const SenderSubID& getSenderSubID() const
+    { return m_senderSubID; }
   const TargetCompID& getTargetCompID() const
     { return m_targetCompID; }
   const std::string& getSessionQualifier() const
@@ -127,6 +146,7 @@ public:
 private:
   BeginString m_beginString;
   SenderCompID m_senderCompID;
+  SenderSubID m_senderSubID;
   TargetCompID m_targetCompID;
   std::string m_sessionQualifier;
   bool m_isFIXT;

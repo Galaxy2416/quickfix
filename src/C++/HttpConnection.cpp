@@ -214,6 +214,7 @@ void HttpConnection::processRoot
       { TD td(b); td.text();
         std::string href = "/session?BeginString=" + i->getBeginString().getValue() +
                             "&SenderCompID=" + i->getSenderCompID().getValue() +
+                            "&SenderSubID=" + i->getSenderSubID().getValue() +
                             "&TargetCompID=" + i->getTargetCompID().getValue();
         if( i->getSessionQualifier().size() )
           href += "&SessionQualifier=" + i->getSessionQualifier();

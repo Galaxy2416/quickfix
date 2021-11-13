@@ -104,6 +104,7 @@ void Session::fill( Header& header )
   m_state.lastSentTime( now );
   header.setField( m_sessionID.getBeginString() );
   header.setField( m_sessionID.getSenderCompID() );
+  header.setField( m_sessionID.getSenderSubID() );
   header.setField( m_sessionID.getTargetCompID() );
   header.setField( MsgSeqNum( getExpectedSenderNum() ) );
   insertSendingTime( header );
